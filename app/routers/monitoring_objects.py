@@ -102,10 +102,12 @@ def update_object(
     object_id: int,
     data: MonitoringObjectUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     monitoring_object = get_monitoring_object_by_id(
         db=db,
         object_id=object_id,
+        owner_id=current_user.id,
     )
 
     if monitoring_object is None:
@@ -120,7 +122,6 @@ def update_object(
         data=data,
     )
 
-
 @router.delete(
     "/{object_id}",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -128,10 +129,12 @@ def update_object(
 def delete_object(
     object_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     monitoring_object = get_monitoring_object_by_id(
         db=db,
         object_id=object_id,
+        owner_id=current_user.id,
     )
 
     if monitoring_object is None:
