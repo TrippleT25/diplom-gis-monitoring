@@ -51,3 +51,8 @@ class MeasurementRead(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class MeasurementStatistics(BaseModel):
+    count: int
+    min_value: float | None
+    max_value: float | None
+    average_value: float | None

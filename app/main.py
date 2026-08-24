@@ -20,3 +20,4 @@ def health_check():
 
 app.include_router(auth_router)
 app.include_router(monitoring_objects_router)
+app.include_router(measurements_router)
