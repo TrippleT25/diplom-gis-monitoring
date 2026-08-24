@@ -4,6 +4,7 @@ from app.routers.auth import router as auth_router
 from app.routers.monitoring_objects import (
     router as monitoring_objects_router,
 )
+from app.routers.measurements import router as measurements_router
 
 
 app = FastAPI(

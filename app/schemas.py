@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic import EmailStr
-
+from datetime import datetime
 
 class MonitoringObjectCreate(BaseModel):
     name: str = Field(min_length=1, max_length=255)
@@ -38,3 +38,16 @@ class UserRead(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class MeasurementCreate(BaseModel):
+    value: float = Field(ge=0)
+
+
+class MeasurementRead(BaseModel):
+    id: int
+    monitoring_object_id: int
+    value: float
+    recorded_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+

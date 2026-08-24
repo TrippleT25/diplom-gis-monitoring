@@ -18,4 +18,10 @@ class MonitoringObject(Base):
         index=True,
     )
 
+    measurements = relationship(
+        "Measurement",
+        back_populates="monitoring_object",
+        cascade="all, delete-orphan",
+    )
+
     owner = relationship("User")
