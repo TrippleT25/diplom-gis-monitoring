@@ -2,20 +2,15 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MonitoringObjectCreate(BaseModel):
-    name: str = Field(
-        min_length=1,
-        max_length=255,
-    )
+    name: str = Field(min_length=1, max_length=255)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
 
-    latitude: float = Field(
-        ge=-90,
-        le=90,
-    )
 
-    longitude: float = Field(
-        ge=-180,
-        le=180,
-    )
+class MonitoringObjectUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
 
 
 class MonitoringObjectRead(BaseModel):

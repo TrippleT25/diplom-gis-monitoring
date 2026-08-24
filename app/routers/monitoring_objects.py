@@ -9,6 +9,20 @@ from app.repositories.monitoring_objects import (
 )
 from app.schemas import MonitoringObjectCreate, MonitoringObjectRead
 
+from app.repositories.monitoring_objects import (
+    create_monitoring_object,
+    delete_monitoring_object,
+    get_monitoring_object_by_id,
+    get_monitoring_objects,
+    update_monitoring_object,
+)
+
+from app.schemas import (
+    MonitoringObjectCreate,
+    MonitoringObjectRead,
+    MonitoringObjectUpdate,
+)
+
 
 router = APIRouter(
     prefix="/monitoring-objects",
@@ -61,3 +75,54 @@ def get_object(
         )
 
     return monitoring_object
+
+@router.patch(
+    "/{object_id}",
+    response_model=MonitoringObjectRead,
+)
+def update_object(
+    object_id: int,
+    data: MonitoringObjectUpdate,
+    db: Session = Depends(get_db),
+):
+    monitoring_object = get_monitoring_object_by_id(
+        db=db,
+        object_id=object_id,
+    )
+
+    if monitoring_object is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Monitoring object not found",
+        )
+
+    return update_monitoring_object(
+        db=db,
+        monitoring_object=monitoring_object,
+        data=data,
+    )
+
+
+@router.delete(
+    "/{object_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_object(
+    object_id: int,
+    db: Session = Depends(get_db),
+):
+    monitoring_object = get_monitoring_object_by_id(
+        db=db,
+        object_id=object_id,
+    )
+
+    if monitoring_object is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Monitoring object not found",
+        )
+
+    delete_monitoring_object(
+        db=db,
+        monitoring_object=monitoring_object,
+    )
