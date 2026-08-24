@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 
-from app.routers.monitoring_objects import router as monitoring_objects_router
+from app.routers.auth import router as auth_router
+from app.routers.monitoring_objects import (
+    router as monitoring_objects_router,
+)
 
 
 app = FastAPI(
@@ -14,4 +17,5 @@ def health_check():
     return {"status": "ok"}
 
 
+app.include_router(auth_router)
 app.include_router(monitoring_objects_router)
