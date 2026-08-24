@@ -29,12 +29,25 @@ router = APIRouter(
     tags=["Monitoring Objects"],
 )
 
+from app.models.user import User
+from app.routers.auth import get_current_user
 
 @router.post(
     "",
     response_model=MonitoringObjectRead,
     status_code=status.HTTP_201_CREATED,
 )
+def create_object(
+    data: MonitoringObjectCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return create_monitoring_object(
+        db=db,
+        data=data,
+        owner_id=current_user.id,
+    )
+
 def create_object(
     data: MonitoringObjectCreate,
     db: Session = Depends(get_db),
@@ -51,9 +64,12 @@ def create_object(
 )
 def get_objects(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return get_monitoring_objects(db)
-
+    return get_monitoring_objects(
+        db=db,
+        owner_id=current_user.id,
+    )
 
 @router.get(
     "/{object_id}",
@@ -62,10 +78,12 @@ def get_objects(
 def get_object(
     object_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     monitoring_object = get_monitoring_object_by_id(
         db=db,
         object_id=object_id,
+        owner_id=current_user.id,
     )
 
     if monitoring_object is None:
